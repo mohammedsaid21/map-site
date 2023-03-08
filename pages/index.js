@@ -4,8 +4,10 @@ import Header from "../components/Header";
 import List from "../components/List";
 import Map from "../components/Map";
 import PlaceDetail from "../components/PlaceDetail";
-import { getPlacesData } from "./api";
+// import { getPlacesData } from "./api";
+import { getPlacesData } from "./api/apiTravel";
 import Head from "next/head";
+import data from "../assets/data.json"
 
 const Home = () => {
   const [places, setPlaces] = useState([]);
@@ -18,7 +20,6 @@ const Home = () => {
 
   useEffect(() => {
     // get the users current location on intial login
-
     navigator.geolocation.getCurrentPosition(
       ({ coords: { latitude, longitude } }) => {
         console.log({ latitude, longitude });
@@ -35,6 +36,20 @@ const Home = () => {
 
   useEffect(() => {
     setIsLoading(true);
+
+    // setPlaces(data['data']);
+    // console.log(data['data'])
+    // setIsLoading(false);
+
+      // fetch('/api')
+      //   .then(response => response.json())
+      //   .then(data => {
+      //     console.log("data ", data); // Log the data before creating LatLng objects
+
+      //     setPlaces(data);
+      //     setIsLoading(false);
+      //   });
+
     getPlacesData(type, bounds?.sw, bounds?.ne).then((data) => {
       console.log(data);
       setPlaces(data);
@@ -57,7 +72,7 @@ const Home = () => {
       </Head>
 
       <Header
-        setType={setType}
+        setType={setType} 
         setRatings={setRatings}
         setCoordinates={setCoordinates}
       />
@@ -67,12 +82,15 @@ const Home = () => {
         isLoading={isLoading}
       />
 
+
       <Map
         setCoordinates={setCoordinates}
         coordinates={coordinates}
         setBounds={setBounds}
         places={filteredPlaces.length ? filteredPlaces : places}
       />
+
+      
     </Flex>
   );
 };
